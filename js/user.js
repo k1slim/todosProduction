@@ -63,7 +63,12 @@ function register(req, res, next) {
     user.save()
         .then(() => {
             db.initializeTabs(user.id);
-            res.send('Registration Successful');
+            req.logIn(user, function (err) {
+                if (err) {
+                    return next(err);
+                }
+            });
+            res.redirect('/');
         })
         .then(null, err => next(err));
 }
